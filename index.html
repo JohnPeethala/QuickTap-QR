@@ -456,10 +456,12 @@
 
             plotBtn.innerText = "Processing...";
             plotBtn.disabled = true;
-            let serial = 1;
             let failedCount = 0;
 
-            for (const pin of pins) {
+            for (let i = 0; i < pins.length; i++) {
+                const pin = pins[i];
+                const serial = i + 1;
+
                 try {
                     // Fetch from free Nominatim API
                     // Countrycodes=in ensures we only get Indian results
@@ -486,7 +488,6 @@
 
                         markerGroup.addLayer(marker);
                         mapMarkers.push(marker);
-                        serial++;
                     } else {
                         console.warn(`No results found for pincode: ${pin}`);
                         failedCount++;
