@@ -303,6 +303,44 @@
                 transform: translateY(0);
             }
         }
+
+        /* PRINT STYLES */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+            body {
+                height: 100%;
+                width: 100%;
+                background: white;
+            }
+            .navbar, .card {
+                display: none !important;
+            }
+            .main-content {
+                padding: 0 !important;
+            }
+            .view-section {
+                gap: 0 !important;
+            }
+            .map-box {
+                padding: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw !important;
+                height: 100vh !important;
+                z-index: 9999;
+            }
+            #map {
+                width: 100% !important;
+                height: 100% !important;
+                border-radius: 0 !important;
+            }
+        }
     </style>
 </head>
 
@@ -357,7 +395,10 @@
                     <textarea id="pincodesInput" rows="10" class="input-field"
                         placeholder="Paste pincodes here...&#10;110001&#10;500081"></textarea>
                 </div>
-                <button id="plotBtn" class="btn">Plot on Map</button>
+                <div style="display: flex; gap: 12px; width: 100%;">
+                    <button id="plotBtn" class="btn" style="flex: 2;">Plot on Map</button>
+                    <button id="printBtn" class="btn" style="flex: 1; background-color: #6b7280; display: none;">Print</button>
+                </div>
             </div>
 
             <div class="map-box">
@@ -446,12 +487,18 @@
 
         // --- Nominatim OpenStreetMap Logic ---
         const plotBtn = document.getElementById('plotBtn');
+        const printBtn = document.getElementById('printBtn');
         const pincodesInput = document.getElementById('pincodesInput');
+
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
 
         plotBtn.addEventListener('click', async () => {
             // Clear existing markers
             markerGroup.clearLayers();
             mapMarkers = [];
+            printBtn.style.display = 'none';
 
             const rawInput = pincodesInput.value;
             const pins = rawInput.split(/[\n,]+/).map(p => p.trim()).filter(p => p.length > 0);
@@ -461,6 +508,7 @@
             plotBtn.innerText = "Processing...";
             plotBtn.disabled = true;
             let failedCount = 0;
+            let failedPins = []; // Track actual failed pincodes
 
             // Group serial numbers by identical pincodes
             const uniquePins = {};
@@ -505,11 +553,13 @@
                         mapMarkers.push(marker);
                     } else {
                         console.warn(`No results found for pincode: ${pin}`);
-                        failedCount += uniquePins[pin].length; // Add all failed instances
+                        failedCount += uniquePins[pin].length;
+                        failedPins.push(pin);
                     }
                 } catch (error) {
                     console.error(`Fetch error for ${pin}:`, error);
-                    failedCount += uniquePins[pin].length; // Add all failed instances
+                    failedCount += uniquePins[pin].length;
+                    failedPins.push(pin);
                 }
 
                 // STRICT RATE LIMITING: Nominatim requires max 1 request per second.
@@ -523,10 +573,12 @@
                 if (map.getZoom() > 14) {
                     map.setZoom(14);
                 }
+                // Show print button when plotting is successful
+                printBtn.style.display = 'block';
             }
 
             if (failedCount > 0) {
-                alert(`Successfully plotted ${mapMarkers.length} pins. Failed to locate ${failedCount} pincodes.`);
+                alert(`Successfully plotted ${mapMarkers.length} unique locations.\n\nFailed to locate ${failedCount} total items.\nProblematic Pincodes:\n${failedPins.join(', ')}`);
             }
 
             plotBtn.innerText = "Plot on Map";
