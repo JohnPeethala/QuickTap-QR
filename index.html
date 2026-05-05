@@ -30,7 +30,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            overflow: hidden; /* Lock page from scrolling */
         }
 
         /* Navbar Styles */
@@ -104,17 +104,19 @@
             flex: 1;
             padding: 40px;
             display: flex;
-            align-items: flex-start;
+            align-items: stretch; /* Stretch to fill height */
             justify-content: flex-start;
+            min-height: 0; /* Crucial for nested flexbox overflow */
         }
 
         /* Views */
         .view-section {
             display: none;
             width: 100%;
+            height: 100%; /* Fill main-content */
             gap: 40px;
-            flex-wrap: wrap;
-            align-items: flex-start;
+            flex-wrap: nowrap; /* Keep side-by-side */
+            align-items: stretch; /* Map fills height */
         }
 
         .view-section.active {
@@ -134,6 +136,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            align-self: flex-start; /* Stop card from stretching vertically */
         }
 
         /* Input Field */
@@ -221,6 +224,7 @@
             min-width: 250px;
             position: relative;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            align-self: center; /* Keep QR boxes vertically centered */
         }
 
         .qr-box span {
@@ -261,7 +265,7 @@
             padding: 12px;
             box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
             min-width: 300px;
-            height: 600px;
+            /* Removed fixed 600px height so it stretches automatically */
         }
 
         #map {
@@ -458,9 +462,20 @@
             plotBtn.disabled = true;
             let failedCount = 0;
 
+            // Group serial numbers by identical pincodes
+            const uniquePins = {};
             for (let i = 0; i < pins.length; i++) {
                 const pin = pins[i];
-                const serial = i + 1;
+                if (!uniquePins[pin]) {
+                    uniquePins[pin] = [];
+                }
+                uniquePins[pin].push(i + 1);
+            }
+
+            const uniquePinKeys = Object.keys(uniquePins);
+
+            for (const pin of uniquePinKeys) {
+                const serialsLabel = uniquePins[pin].join(', ');
 
                 try {
                     // Fetch from free Nominatim API
@@ -478,8 +493,8 @@
                         // Drop standard Leaflet marker
                         const marker = L.marker([lat, lon]);
                         
-                        // Bind a permanent tooltip to show the serial number
-                        marker.bindTooltip(serial.toString(), {
+                        // Bind a permanent tooltip to show the combined serial numbers
+                        marker.bindTooltip(serialsLabel, {
                             permanent: true,
                             direction: 'top',
                             className: 'custom-tooltip',
@@ -490,11 +505,11 @@
                         mapMarkers.push(marker);
                     } else {
                         console.warn(`No results found for pincode: ${pin}`);
-                        failedCount++;
+                        failedCount += uniquePins[pin].length; // Add all failed instances
                     }
                 } catch (error) {
                     console.error(`Fetch error for ${pin}:`, error);
-                    failedCount++;
+                    failedCount += uniquePins[pin].length; // Add all failed instances
                 }
 
                 // STRICT RATE LIMITING: Nominatim requires max 1 request per second.
