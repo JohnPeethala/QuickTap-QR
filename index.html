@@ -9,7 +9,6 @@
     <!-- Fonts & Libraries -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
     <style>
         :root {
@@ -471,21 +470,6 @@
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark');
             localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
-        });
-
-        // --- Cinematic Entrance ---
-        window.addEventListener('DOMContentLoaded', () => {
-            gsap.set([".brand-card", ".controls", ".card"], { opacity: 0 });
-            
-            const isMobile = window.innerWidth <= 768;
-            const duration = isMobile ? 0.35 : 0.7; /* Significantly faster */
-            const stagger = isMobile ? 0.05 : 0.1;
-
-            const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: duration } });
-            
-            tl.to(".brand-card", { x: 0, opacity: 1, startAt: { x: isMobile ? -15 : -30 } })
-              .to(".controls", { x: 0, opacity: 1, startAt: { x: isMobile ? 15 : 30 } }, "-=0.3")
-              .to(".card", { y: 0, opacity: 1, startAt: { y: isMobile ? 15 : 30 }, stagger: stagger }, "-=0.2");
         });
 
         // --- QR Generation Engine ---
