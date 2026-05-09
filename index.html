@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuickTap QR | Premium QR Suite</title>
-    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Crect x='7' y='7' width='3' height='3'%3E%3C/rect%3E%3Crect x='14' y='7' width='3' height='3'%3E%3C/rect%3E%3Crect x='7' y='14' width='3' height='3'%3E%3C/rect%3E%3Crect x='14' y='14' width='3' height='3'%3E%3C/rect%3E%3C/svg%3E">
+
     <!-- Fonts & Libraries -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-    
+
     <style>
         :root {
             --bg: #f8fafc;
@@ -43,7 +45,7 @@
         body {
             font-family: 'Outfit', sans-serif;
             background-color: var(--bg);
-            background-image: 
+            background-image:
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 40px 40px;
@@ -81,31 +83,9 @@
             transition: all 0.3s ease;
         }
 
-        /* The Base Widget Style (Synced) */
-        .widget-card {
-            width: 56px;
-            height: 56px;
-            background-color: var(--card);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: var(--card-shadow);
-            border: 1px solid var(--card-border);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            pointer-events: auto;
-        }
-
         /* Base Widget / Card Style */
-        .brand-card, .widget-card {
+        .brand-card,
+        .widget-card {
             background-color: var(--card);
             border-radius: 12px;
             box-shadow: var(--card-shadow);
@@ -119,7 +99,8 @@
 
         .brand-card {
             padding: 0 24px 0 0;
-            gap: 4px; /* Reduced gap for tighter integration */
+            gap: 4px;
+            /* Reduced gap for tighter integration */
         }
 
         .widget-card {
@@ -143,7 +124,7 @@
             width: 32px;
             height: 32px;
             stroke-width: 2.2;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
         }
 
         .brand-name {
@@ -159,7 +140,7 @@
             width: 32px;
             height: 32px;
             stroke-width: 2.2;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
             transition: transform 0.3s ease;
             transform-origin: center;
         }
@@ -192,7 +173,8 @@
             max-width: 900px;
             justify-content: center;
             flex-wrap: wrap;
-            align-items: flex-start; /* Prevents cards from matching each other's expanded height */
+            align-items: flex-start;
+            /* Prevents cards from matching each other's expanded height */
         }
 
         /* --- Components --- */
@@ -296,8 +278,15 @@
 
         /* --- Animations --- */
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         /* --- Mobile Optimization (Native App Feel) --- */
@@ -334,7 +323,8 @@
 
             .main-content {
                 padding: 100px 20px 40px 20px;
-                justify-content: flex-start; /* Better for scrolling lists */
+                justify-content: flex-start;
+                /* Better for scrolling lists */
             }
 
             .card {
@@ -349,7 +339,8 @@
             }
 
             .input-field {
-                font-size: 1.05rem; /* Better mobile tap target */
+                font-size: 1.05rem;
+                /* Better mobile tap target */
                 padding: 16px 20px;
             }
 
@@ -373,10 +364,21 @@
         }
 
         /* Theme Icon Visibility */
-        .sun-icon { display: none; }
-        .moon-icon { display: block; }
-        body.dark .sun-icon { display: block; }
-        body.dark .moon-icon { display: none; }
+        .sun-icon {
+            display: none;
+        }
+
+        .moon-icon {
+            display: block;
+        }
+
+        body.dark .sun-icon {
+            display: block;
+        }
+
+        body.dark .moon-icon {
+            display: none;
+        }
     </style>
 </head>
 
@@ -385,7 +387,8 @@
     <nav class="nav-container">
         <div class="brand-card">
             <div class="brand-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                     <rect x="7" y="7" width="3" height="3"></rect>
                     <rect x="14" y="7" width="3" height="3"></rect>
@@ -398,17 +401,28 @@
 
         <div class="controls">
             <button class="widget-card control-btn" id="appShareBtn" title="Share App">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                    <polyline points="16 6 12 2 8 6"></polyline>
+                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
             </button>
             <button class="widget-card control-btn" id="themeToggle" title="Toggle Theme">
-                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                 </svg>
-                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
             </button>
@@ -421,19 +435,30 @@
             <div class="card" id="phoneCard">
                 <div class="input-group">
                     <span class="input-label">Quick Dialer</span>
-                    <input type="text" id="phoneInput" class="input-field" placeholder="Enter phone number..." autocomplete="off">
+                    <input type="text" id="phoneInput" class="input-field" placeholder="Enter phone number..."
+                        autocomplete="off">
                 </div>
                 <div class="qr-results" id="phoneResults">
                     <div class="qr-item">
                         <button class="qr-share-btn" onclick="shareQR('dialer')">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                <polyline points="16 6 12 2 8 6"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="15"></line>
+                            </svg>
                         </button>
                         <canvas id="qrDialer"></canvas>
                         <span>Standard Dialer</span>
                     </div>
                     <div class="qr-item">
                         <button class="qr-share-btn" onclick="shareQR('whatsapp')">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                <polyline points="16 6 12 2 8 6"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="15"></line>
+                            </svg>
                         </button>
                         <canvas id="qrWhatsapp"></canvas>
                         <span>WhatsApp Chat</span>
@@ -445,12 +470,18 @@
             <div class="card" id="textCard">
                 <div class="input-group">
                     <span class="input-label">Text & Links</span>
-                    <input type="text" id="textInput" class="input-field" placeholder="Paste link or text..." autocomplete="off">
+                    <input type="text" id="textInput" class="input-field" placeholder="Paste link or text..."
+                        autocomplete="off">
                 </div>
                 <div class="qr-results" id="textResults">
                     <div class="qr-item">
                         <button class="qr-share-btn" onclick="shareQR('text')">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                <polyline points="16 6 12 2 8 6"></polyline>
+                                <line x1="12" y1="2" x2="12" y2="15"></line>
+                            </svg>
                         </button>
                         <canvas id="qrText"></canvas>
                     </div>
@@ -463,10 +494,10 @@
         // --- System Logic ---
         const body = document.body;
         const themeToggle = document.getElementById('themeToggle');
-        
+
         // Load Theme
         if (localStorage.getItem('theme') === 'dark') body.classList.add('dark');
-        
+
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('dark');
             localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
@@ -481,7 +512,6 @@
         const textInput = document.getElementById('textInput');
         const phoneResults = document.getElementById('phoneResults');
         const textResults = document.getElementById('textResults');
-        const textLabel = document.getElementById('textLabel');
 
         // Phone Logic
         phoneInput.addEventListener('input', (e) => {
@@ -502,7 +532,7 @@
             if (val.length > 0) {
                 qrText.value = val;
                 textResults.style.display = 'flex';
-                
+
                 // Centering shift for mobile
                 if (window.innerWidth < 768) {
                     setTimeout(() => textResults.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
@@ -514,14 +544,17 @@
 
         // --- Sharing ---
         const appShareBtn = document.getElementById('appShareBtn');
+
         if (!navigator.share) {
             appShareBtn.style.display = 'none';
             document.querySelectorAll('.qr-share-btn').forEach(b => b.style.display = 'none');
         }
 
-        appShareBtn.addEventListener('click', () => {
+        const shareApp = () => {
             navigator.share({ title: 'QuickTap QR', url: window.location.href });
-        });
+        };
+
+        appShareBtn.addEventListener('click', shareApp);
 
         function shareQR(type) {
             let data = { title: 'QuickTap QR' };
