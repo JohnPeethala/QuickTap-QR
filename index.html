@@ -223,6 +223,12 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
+        textarea.input-field {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
         /* Integrated QR Display */
         .qr-results {
             display: none;
@@ -470,21 +476,10 @@
             <div class="card" id="textCard">
                 <div class="input-group">
                     <span class="input-label">Text & Links</span>
-                    <input type="text" id="textInput" class="input-field" placeholder="Paste link or text..."
-                        autocomplete="off">
+                    <textarea id="textInput" class="input-field" placeholder="Paste links or text (one per line)..."
+                        autocomplete="off"></textarea>
                 </div>
                 <div class="qr-results" id="textResults">
-                    <div class="qr-item">
-                        <button class="qr-share-btn" onclick="shareQR('text')">
-                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                                <polyline points="16 6 12 2 8 6"></polyline>
-                                <line x1="12" y1="2" x2="12" y2="15"></line>
-                            </svg>
-                        </button>
-                        <canvas id="qrText"></canvas>
-                    </div>
                 </div>
             </div>
         </div>
@@ -506,7 +501,6 @@
         // --- QR Generation Engine ---
         const qrDialer = new QRious({ element: document.getElementById('qrDialer'), size: 400, padding: 0, foreground: '#000000', background: '#ffffff' });
         const qrWhatsapp = new QRious({ element: document.getElementById('qrWhatsapp'), size: 400, padding: 0, foreground: '#000000', background: '#ffffff' });
-        const qrText = new QRious({ element: document.getElementById('qrText'), size: 400, padding: 0, foreground: '#000000', background: '#ffffff' });
 
         const phoneInput = document.getElementById('phoneInput');
         const textInput = document.getElementById('textInput');
@@ -528,9 +522,50 @@
 
         // Text Logic
         textInput.addEventListener('input', (e) => {
-            const val = e.target.value.trim();
-            if (val.length > 0) {
-                qrText.value = val;
+            const lines = e.target.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            textResults.innerHTML = '';
+            
+            if (lines.length > 0) {
+                lines.forEach((line) => {
+                    const qrItem = document.createElement('div');
+                    qrItem.className = 'qr-item';
+                    
+                    const shareBtn = document.createElement('button');
+                    shareBtn.className = 'qr-share-btn';
+                    shareBtn.onclick = () => shareTextQR(line);
+                    shareBtn.innerHTML = `
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                    `;
+                    if (!navigator.share) shareBtn.style.display = 'none';
+
+                    const canvas = document.createElement('canvas');
+                    
+                    const label = document.createElement('span');
+                    label.textContent = line.length > 25 ? line.substring(0, 25) + '...' : line;
+                    label.style.wordBreak = 'break-all';
+
+                    qrItem.appendChild(shareBtn);
+                    qrItem.appendChild(canvas);
+                    qrItem.appendChild(label);
+                    
+                    textResults.appendChild(qrItem);
+
+                    new QRious({
+                        element: canvas,
+                        size: 400,
+                        padding: 0,
+                        foreground: '#000000',
+                        background: '#ffffff',
+                        value: line
+                    });
+                });
+
                 textResults.style.display = 'flex';
 
                 // Centering shift for mobile
@@ -541,6 +576,12 @@
                 textResults.style.display = 'none';
             }
         });
+
+        function shareTextQR(text) {
+            if (navigator.share) {
+                navigator.share({ title: 'QuickTap QR', text: text });
+            }
+        }
 
         // --- Sharing ---
         const appShareBtn = document.getElementById('appShareBtn');
@@ -558,7 +599,6 @@
 
         function shareQR(type) {
             let data = { title: 'QuickTap QR' };
-            if (type === 'text') data.text = textInput.value;
             if (type === 'dialer') data.url = `tel:${phoneInput.value.slice(-10)}`;
             if (type === 'whatsapp') data.url = `https://wa.me/91${phoneInput.value.slice(-10)}`;
             navigator.share(data);
