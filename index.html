@@ -385,6 +385,36 @@
         body.dark .moon-icon {
             display: none;
         }
+
+        /* --- Immersive Full Screen QR --- */
+        .immersive-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .immersive-overlay canvas {
+            width: 90vmin !important;
+            height: 90vmin !important;
+            background: white;
+            padding: 2vmin;
+            border-radius: 4px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 
@@ -454,7 +484,7 @@
                                 <line x1="12" y1="2" x2="12" y2="15"></line>
                             </svg>
                         </button>
-                        <canvas id="qrDialer"></canvas>
+                        <canvas id="qrDialer" style="cursor: pointer;" onclick="showImmersiveQR(`tel:${phoneInput.value.slice(-10)}`)"></canvas>
                         <span>Standard Dialer</span>
                     </div>
                     <div class="qr-item">
@@ -466,7 +496,7 @@
                                 <line x1="12" y1="2" x2="12" y2="15"></line>
                             </svg>
                         </button>
-                        <canvas id="qrWhatsapp"></canvas>
+                        <canvas id="qrWhatsapp" style="cursor: pointer;" onclick="showImmersiveQR(`https://wa.me/91${phoneInput.value.slice(-10)}`)"></canvas>
                         <span>WhatsApp Chat</span>
                     </div>
                 </div>
@@ -545,6 +575,8 @@
                     if (!navigator.share) shareBtn.style.display = 'none';
 
                     const canvas = document.createElement('canvas');
+                    canvas.style.cursor = 'pointer';
+                    canvas.onclick = () => showImmersiveQR(line);
                     
                     const label = document.createElement('span');
                     label.textContent = line.length > 25 ? line.substring(0, 25) + '...' : line;
@@ -603,7 +635,33 @@
             if (type === 'whatsapp') data.url = `https://wa.me/91${phoneInput.value.slice(-10)}`;
             navigator.share(data);
         }
+
+        // --- Immersive Logic ---
+        const immersiveOverlay = document.getElementById('immersiveOverlay');
+        const immersiveQRCanvas = document.getElementById('immersiveQR');
+        const immersiveQR = new QRious({
+            element: immersiveQRCanvas,
+            size: 1000,
+            padding: 0,
+            foreground: '#000000',
+            background: '#ffffff'
+        });
+
+        function showImmersiveQR(value) {
+            immersiveQR.value = value;
+            immersiveOverlay.style.display = 'flex';
+            // Prevent scrolling
+            document.body.style.overflow = 'hidden';
+        }
+
+        immersiveOverlay.addEventListener('click', () => {
+            immersiveOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
     </script>
+    <div id="immersiveOverlay" class="immersive-overlay">
+        <canvas id="immersiveQR"></canvas>
+    </div>
 </body>
 
 </html>
